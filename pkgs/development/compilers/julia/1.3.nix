@@ -18,9 +18,9 @@ with stdenv.lib;
 
 let
   majorVersion = "1";
-  minorVersion = "3";
-  maintenanceVersion = "1";
-  src_sha256 = "0q9a7yc3b235psrwl5ghyxgwly25lf8n818l8h6bkf2ymdbsv5p6";
+  minorVersion = "4";
+  maintenanceVersion = "2";
+  src_sha256 = "14jghi9mw0wdi6y9saarf0nzary9i21jx43zznddzrq48v4nlayj";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr blas openlibm
-    openspecfun pcre2
+    openspecfun pcre2 lapack
   ];
 
   enableParallelBuilding = true;
@@ -124,6 +124,8 @@ stdenv.mkDerivation rec {
   # Julia's tests require read/write access to $HOME
   preCheck = ''
     export HOME="$NIX_BUILD_TOP"
+    export USER=$(whoami)
+    export JULIA_CPU_THREADS=''${NIX_BUILD_CORES:-1}
   '';
 
   preBuild = ''
